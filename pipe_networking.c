@@ -44,7 +44,23 @@ int server_handshake(int *to_client) {
     exit(1);
   }
   printf("[server] received client pipe name: %s\n", client_pipe);
-  
+  if(remove(WKP) == -1){
+    perror("[server] error removing wkp");
+    exit(1);
+  }
+  printf("[server] WKP removed.\n");
+  *to_client = open(client_pipe, O_WRONLY);
+  if(*to_client == -1){
+    perror("[server] error opening client pipe");
+    exit(1);
+  }
+
+  const char *acknowledgment = "ACK";
+  if(write(*to_client, acknowledgment, strlen(acknowledgment) +1)==-1){
+    perror("[server] error writing to client pipe");
+    exit(1);
+  }
+  printf("[server] sent acknowledgment to client.\n");
   return from_client;
 }
 
