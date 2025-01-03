@@ -61,6 +61,13 @@ int server_handshake(int *to_client) {
     exit(1);
   }
   printf("[server] sent acknowledgment to client.\n");
+  
+  char buffer[HANDSHAKE_BUFFER_SIZE];
+  if(read(from_client, buffer, sizeof(buffer)) == -1){
+    perror("[server] error reading client acknowledgment");
+    exit(1);
+  }
+  printf("[server] received acknowledgment from client: %s\n", buffer);
   return from_client;
 }
 
