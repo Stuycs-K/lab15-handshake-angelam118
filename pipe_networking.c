@@ -89,9 +89,19 @@ int client_handshake(int *to_server) {
 
   if(mkfifo(private_pipe, 0644) == -1){
     perror("[client] error creating private pipe");
-    exit(1)
+    exit(1);
+  }
+  *to_server = open(WKP, O_WRONLY);
+  if(*to_server == -1){
+    perror("[client] error opening WKP");
+    exit(1);
   }
 
+  if(write(*to_server, private_pipe, strlen(private_pipe) +1) == -1){
+    perror("[client] error writing to WKP");
+    exit(1);
+  }
+  printf("[client] sent private pipe name to server.\n");
   return from_server;
 }
 
