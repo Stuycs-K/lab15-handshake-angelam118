@@ -25,6 +25,13 @@ int server_setup() {
   =========================*/
 int server_handshake(int *to_client) {
   int from_client;
+  printf("[server] creating wkp...\n");
+  if(mkfifo(WKP, 0644) == -1){
+    perror("[server] error creating wkp");
+    exit(1);
+  }
+
+  printf("[server] waiting for a connection");
   return from_client;
 }
 
@@ -53,6 +60,7 @@ int client_handshake(int *to_server) {
   returns the file descriptor for the downstream pipe.
   =========================*/
 int server_connect(int from_client) {
+  
   int to_client  = 0;
   return to_client;
 }
