@@ -116,7 +116,19 @@ int client_handshake(int *to_server) {
   }
 
   printf("[client] received acknowledgment from server: %s\n", buffer);
-  
+
+  const char *acknowledgment = "ACK";
+  if(write(*to_server, acknowledgment, strlen(acknowledgment)+1) == -1){
+    perror("[client] error writing acknowledgment to server");
+    exit(1);
+  }
+  printf("[client] sent acknowledgment to server.\n");
+
+  if(remove(private_pipe) == -1){
+    perror("[client] error removing private pipe");
+    exit(1);
+  }
+  printf("[client] private pipe removed.\n");
   return from_server;
 }
 
