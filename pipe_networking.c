@@ -102,6 +102,21 @@ int client_handshake(int *to_server) {
     exit(1);
   }
   printf("[client] sent private pipe name to server.\n");
+
+  from_server = open(private_pipe, O_RDONLY);
+  if(from_server == -1){
+    perror("[client] error opening private pipe");
+    exit(1);
+  }
+
+  char buffer[HANDSHAKE_BUFFER_SIZE];
+  if(read(from_server, buffer, sizeof(buffer)) == -1){
+    perror("[client] error reading from private pipe");
+    exit(1);
+  }
+
+  printf("[client] received acknowledgment from server: %s\n", buffer);
+  
   return from_server;
 }
 
