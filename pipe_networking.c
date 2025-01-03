@@ -32,6 +32,19 @@ int server_handshake(int *to_client) {
   }
 
   printf("[server] waiting for a connection");
+  from_client = open(WKP, O_RDONLY);
+  if(from_client == -1){
+    perror("[server] error opening wkp");
+    exit(1);
+  }
+
+  char client_pipe[HANDSHAKE_BUFFER_SIZE];
+  if(read(from_client, client_pipe, sizeof(client_pipe)) == -1){
+    perror("[server] error reading from wkp");
+    exit(1);
+  }
+  printf("[server] received client pipe name: %s\n", client_pipe);
+  
   return from_client;
 }
 
