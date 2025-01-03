@@ -83,6 +83,15 @@ int server_handshake(int *to_client) {
   =========================*/
 int client_handshake(int *to_server) {
   int from_server;
+  char private_pipe[HANDSHAKE_BUFFER_SIZE];
+  sprintf(private_pipe, "pipe_%d", getpid());
+  printf("[client] creating private pipe: %s\n", private_pipe);
+
+  if(mkfifo(private_pipe, 0644) == -1){
+    perror("[client] error creating private pipe");
+    exit(1)
+  }
+
   return from_server;
 }
 
